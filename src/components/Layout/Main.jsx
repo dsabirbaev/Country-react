@@ -1,25 +1,32 @@
 
 import search from "../../assets/icons/search.svg";
 import Card from "../UI/Card/Card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+const baseURL = "https://restcountries.com/v2/all";
 
 const Main = () => {
 
     const [country, setCountry] = useState([])
 
-    async function fetchCountries(){
-        try {
-          const response = await axios.get('https://restcountries.com/v2/all');
-          setCountry(response.data);
-        } catch (error) {
-          console.log(error.message);
-        } finally {
-          console.log("loading");
-        }
-    };
+    useEffect(() => {
+        async function fetchCountries(){
+            try {
+              const response = await axios.get(baseURL);
+              setCountry(response.data);
+            } catch (error) {
+              console.log(error.message);
+            } finally {
+              console.log("loading");
+            }
+        };
+        fetchCountries();
+        
+    }, [])
+
+    
       
-    fetchCountries();
+   
         
 
     return (
