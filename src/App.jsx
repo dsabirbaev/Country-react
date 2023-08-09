@@ -1,12 +1,16 @@
 
 import Header from "./components/Header";
 import Layout from "./components/Layout";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 const App = () => {
   return (
-    <div>
-      <Header/>
-      <Layout/>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Header/>
+        <Layout/>
+      </div>
+    </BrowserRouter>
+   
   );
 };
 

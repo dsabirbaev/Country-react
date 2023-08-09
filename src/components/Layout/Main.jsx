@@ -16,8 +16,8 @@ const Main = () => {
     const [country, setCountry] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false)
-    const [searchText, setSearchText] = useState('');
-  
+    
+
     async function fetchCountries(){
         setLoading(true);
         try {
@@ -34,9 +34,9 @@ const Main = () => {
         fetchCountries();
     }, [])
 
-    async function searchCountry() {
+    async function searchCountry(text) {
         try {
-          const response = await axios.get(`${baseURL}/name/${searchText}`);
+          const response = await axios.get(`${baseURL}/name/${text}`);
           setCountry(response.data);
           if(!response.data.length){
             fetchCountries()
@@ -46,6 +46,7 @@ const Main = () => {
         }
     }
 
+    
     async function filterByRegion(region) {
         try{
             const response = await axios.get(`${baseURL}/region/${region}`);
@@ -55,29 +56,29 @@ const Main = () => {
         }
     }
 
-    function handleSearchCountry(e){
-        e.preventDefault();
-        searchCountry()
-    }
-
-    function handleFilterByRegion(e) {
-        e.preventDefault();
-        filterByRegion();
-    }
+    // function handleFilterByRegion(e) {
+    //     e.preventDefault();
+    //     filterByRegion();
+    // }
     
- 
+let searchTimeout;
+
+function handleSearchKeyUp() {
+    clearTimeout(searchTimeout); 
+    searchTimeout = setTimeout(searchCountry, 300); 
+}
 
     
     return (
         <section className="pt-[48px]">
             <div className="container mx-auto px-5">
                 <div className="flex items-center justify-between mb-[48px]">
-                    <form onSubmit={handleSearchCountry} autoComplete="off" className="w-[480px] bg-white py-[19px] px-9 rounded-md flex gap-x-6 shadow-md">
+                    <form  autoComplete="off" className="w-[480px] bg-white py-[19px] px-9 rounded-md flex gap-x-6 shadow-md">
                         <img src={search} alt="search" />
-                        <input value={searchText} onChange={(e) => setSearchText(e.target.value)} className="outline-none w-full text-[14px] text-[#848484]" type="text" placeholder="Search for a country…" />
+                        <input  onChange={(e) => searchCountry(e.target.value)} onKeyUp={handleSearchKeyUp} className="outline-none w-full text-[14px] text-[#848484]" type="text" placeholder="Search for a country…" />
                     </form>
 
-                    <form onSubmit={handleFilterByRegion}>
+                    <form onSubmit={() => filterByRegion()}>
                         <select value={regions.name} onChange={(e) => filterByRegion(e.target.value)} className="oultine-none w-[200px] shadow py-[18px] px-6">
                             {
                                 regions.map((region, index) => (
@@ -105,7 +106,7 @@ const Main = () => {
                     {
                         errorMsg ? (
                             <div>
-                                <h3>{errorMsg}</h3>
+                                {/* <h3>{errorMsg}</h3> */}
                             </div>)
                         :null
                     }
