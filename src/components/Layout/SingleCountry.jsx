@@ -1,80 +1,88 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-export default function SingleCountry() {
-  const [country, setCountry] = useState([]);
+import back from "../../assets/icons/back.svg";
+
+
+const SingleCountry = () => {
+
+  const [singleCountry, setSingleCountry] = useState([]);
   const { name } = useParams();
 
+  async function getSingleCountry() {
+    try {
+      const response = await axios.get(`https://restcountries.com/v2/name/${name}`);
+      setSingleCountry(response.data);
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
-    const getSingleCountry = async () => {
-      try {
-        const res = await fetch(`https://restcountries.com/v2/name/${name}`);
-        const data = await res.json();
-        setCountry(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
     getSingleCountry();
+    
   }, [name]);
 
   useEffect(() => {
     document.title = `Countries | ${name}`;
-  }, [name]);
-
+  }, [name])
   return (
-    <>
-      <section className="p-8 md:py-0 max-w-7xl mx-auto">
-        {country.map((item) => (
-          <div
-            key={item.population}
-            className="grid grid-cols-1 gap-8 md:grid-cols-2 md:place-items-center md:h-screen"
-          >
-            <article>
-              <img src={item.flags.svg} alt={item.name.common} />
-            </article>
+    
+    <section className="pt-[100px] relative">
+      <Link to="/">
+        <div className="flex gap-x-2 font-light text-[16px] absolute top-[40px] left-[60px]">
+          <img src={back} alt="back"/>
+          Back
+        </div>
+      </Link>
+     
+      <div className="container mx-auto px-5">
+        {
+          singleCountry.map((item, index) => (
+            <div key={item.population} className="flex items-center gap-x-[100px]">
 
-            <article>
-              <h1 className="mb-8 font-bold text-gray-900 dark:text-white text-4xl lg:text-6xl">
-                {item.name.official}
-              </h1>
-
-              <ul className="my-4 flex flex-col items-start justify-start gap-2 text-slate-700 dark:text-gray-400">
-                <li>Capital: {item.capital[0]}</li>
-                <li>Population: {item.population.toLocaleString()}</li>
-                <li>Region: {item.region}</li>
-                <li>Subregion: {item.subregion}</li>
-              </ul>
-
-              {item.borders && (
-                <>
-                  <h3 className="text-gray-900 font-bold text-lg mb-2 dark:text-white">
-                    Borders:
-                  </h3>
-                  <ul className="flex flex-wrap items-start justify-start gap-2">
-                    {item.borders.map((border, index) => (
-                      <li
-                        key={index}
-                        className="bg-white p-2 rounded text-xs tracking-wide shadow dark:bg-gray-800 dark:text-gray-400 text-gray-700"
-                      >
-                        {border}
-                      </li>
-                    ))}
+              <img src={item.flags.svg} alt={item.name} className="w-[550px] object-cover object-center" />
+              <div className="w-full">
+                <h1 className="mb-[23px] font-black text-[32px]">{item.name}</h1>
+                <div className="flex justify-between mb-[80px]">
+                  <ul className="flex flex-col gap-y-2 text-[16px] font-semibold">
+                    <li>Native Name: <span className="font-light"> {item.nativeName} </span></li>
+                    <li>Population: <span className="font-light"> {item.population.toLocaleString()}</span></li>
+                    <li>Region: <span className="font-light"> {item.region}</span></li>
+                    <li>Sub Region: <span className="font-light"> {item.subregion}</span></li>
+                    <li>Capital: <span className="font-light"> {item.capital}</span></li>
                   </ul>
-                </>
-              )}
+                  <ul className="flex flex-col gap-y-2">
+                    <li>Top Level Domain: <span className="font-light"> {item.topLevelDomain}</span></li>
+                    <li>Currencies: <span className="font-light"> {item.currencies.map(value => value.name)}</span></li>
+                    <li>Languages: <span className="font-light"> {item.languages.map(value => value.name)}</span></li>
+                  </ul>
+                </div>
 
-              <Link
-                to="/"
-                className="inline-block mt-8 bg-white py-2 px-6 rounded shadow text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-400"
-              >
-                &larr; Back
-              </Link>
-            </article>
-          </div>
-        ))}
-      </section>
-    </>
+                <div className="flex">
+                  <p className="font-semibold text-[16px]">Border countries: </p> 
+                  <span> 
+                    {
+                    item.borders.map(item => (
+                       <span className="py-[5px] px-[25px] border rounded-sm mx-1 capitalize">{item}</span>
+                    ))
+                    }
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+     
+    </section>
+
   );
-}
+};
+
+
+export default SingleCountry;
+

@@ -70,7 +70,7 @@ function handleSearchKeyUp() {
 
     
     return (
-        <section className="pt-[48px]">
+        <section className="pt-[128px]">
             <div className="container mx-auto px-5">
                 <div className="flex items-center justify-between mb-[48px]">
                     <form  autoComplete="off" className="w-[480px] bg-white py-[19px] px-9 rounded-md flex gap-x-6 shadow-md">
