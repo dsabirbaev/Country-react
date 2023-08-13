@@ -32,6 +32,7 @@ const Main = () => {
 
     useEffect(() => {
         fetchCountries();
+        document.title = "Showing all country";
     }, [])
 
     async function searchCountry(text) {
@@ -97,8 +98,7 @@ function handleSearchKeyUp() {
                         loading ? <Loader/> : null
                     }
                     {   country.length > 0 ?
-                        country.map((item, index) => {
-                        
+                        country?.map((item, index) => {
                             return <Card key={index} state={item}/>
                         }) : null
                     }

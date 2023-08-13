@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 import back from "../../assets/icons/back.svg";
 
@@ -22,27 +22,27 @@ const SingleCountry = () => {
   useEffect(() => {
 
     getSingleCountry();
-    
+    document.title = `Countries | ${name}`;
   }, [name]);
 
-  useEffect(() => {
-    document.title = `Countries | ${name}`;
-  }, [name])
+ 
+
   return (
     
-    <section className="pt-[100px] relative">
-      <Link to="/">
-        <div className="flex gap-x-2 font-light text-[16px] absolute top-[40px] left-[60px]">
+    <section className="pt-[180px] relative">
+      <NavLink to="/">
+        <div className="flex gap-x-2 font-light text-[16px] absolute top-[100px] left-[60px]">
           <img src={back} alt="back"/>
           Back
         </div>
-      </Link>
-     
+      </NavLink>
+   
       <div className="container mx-auto px-5">
         {
-          singleCountry.map((item, index) => (
-            <div key={item.population} className="flex items-center gap-x-[100px]">
-
+          singleCountry?.map((item, index) => (
+           
+            <div key={index} className="flex items-center gap-x-[100px]">
+           
               <img src={item.flags.svg} alt={item.name} className="w-[550px] object-cover object-center" />
               <div className="w-full">
                 <h1 className="mb-[23px] font-black text-[32px]">{item.name}</h1>
@@ -61,16 +61,19 @@ const SingleCountry = () => {
                   </ul>
                 </div>
 
-                <div className="flex">
+                <div className="flex gap-x-1">
                   <p className="font-semibold text-[16px]">Border countries: </p> 
                   <span> 
                     {
-                    item.borders.map(item => (
-                       <span className="py-[5px] px-[25px] border rounded-sm mx-1 capitalize">{item}</span>
-                    ))
+                    item.borders ?
+                    item?.borders?.map((item, index) => (
+                       <span key={index} className="py-[5px] px-[25px] border rounded-sm mx-1 capitalize">{item}</span>
+                    )):
+                    (<strong>No borders!</strong>)
                     }
                   </span>
                 </div>
+
               </div>
             </div>
           ))
