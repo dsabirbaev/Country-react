@@ -4,7 +4,7 @@ import Card from "../UI/Card/Card";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import regions from "../db/regions";
+// import regions from "../db/regions";
 
 const baseURL = "https://restcountries.com/v2";
 
@@ -12,23 +12,32 @@ import Loader from "./Loader";
 
 const Main = () => {
     
- 
+    
     const [country, setCountry] = useState([]);
+   
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false)
-    
 
     async function fetchCountries(){
         setLoading(true);
         try {
           const response = await axios.get(`${baseURL}/all`);
           setCountry(response.data);
+          
           setLoading(false)
         } catch (err) {
           setErrorMsg(err.message);
           setLoading(false);
         } 
     };
+   
+   
+    const regions = [];
+    country?.map(item => regions.push(item.region));
+   
+    const uniqueRegions = Array.from(new Set(regions));
+   
+
 
     useEffect(() => {
         fetchCountries();
@@ -80,11 +89,11 @@ function handleSearchKeyUp() {
                     </form>
 
                     <form onSubmit={() => filterByRegion()}>
-                        <select value={regions.name} onChange={(e) => filterByRegion(e.target.value)} className="oultine-none w-[200px] shadow py-[18px] px-6">
+                        <select onChange={(e) => filterByRegion(e.target.value)} className="oultine-none w-[200px] shadow py-[18px] px-6">
                             {
-                                regions.map((region, index) => (
-                                    <option key={index} value={region.name}>
-                                        {region.name}
+                                uniqueRegions.map((item, index) => (
+                                    <option key={index} value={item}>
+                                        {item}
                                     </option>
                                 ))
                             }

@@ -41,9 +41,9 @@ const SingleCountry = () => {
         {
           singleCountry?.map((item, index) => (
            
-            <div key={index} className="flex items-center gap-x-[100px]">
+            <div key={index} className="flex items-center gap-x-[50px]">
            
-              <img src={item.flags.svg} alt={item.name} className="w-[550px] object-cover object-center" />
+              <img src={item.flags.svg} alt={item.name} className="w-[550px] h-[350px] border object-cover object-center" />
               <div className="w-full">
                 <h1 className="mb-[23px] font-black text-[32px]">{item.name}</h1>
                 <div className="flex justify-between mb-[80px]">
