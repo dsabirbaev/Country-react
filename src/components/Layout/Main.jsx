@@ -14,7 +14,7 @@ const Main = () => {
     
     
     const [country, setCountry] = useState([]);
-   
+    const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false)
 
@@ -23,7 +23,7 @@ const Main = () => {
         try {
           const response = await axios.get(`${baseURL}/all`);
           setCountry(response.data);
-          
+          setCategory(response.data)
           setLoading(false)
         } catch (err) {
           setErrorMsg(err.message);
@@ -33,7 +33,7 @@ const Main = () => {
    
    
     const regions = [];
-    country?.map(item => regions.push(item.region));
+    category?.map(item => regions.push(item.region));
    
     const uniqueRegions = Array.from(new Set(regions));
    
